@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[5]:
+# In[1]:
 
 
 import os
@@ -17,7 +17,7 @@ import pandas as pd
 import numpy as np
 
 
-# In[6]:
+# In[2]:
 
 
 # For debugging purposes
@@ -31,28 +31,28 @@ def in_notebook():
         return False
 
 
-# In[7]:
+# In[3]:
 
 
 _HOME_DIR = os.path.expanduser("~")
 if in_notebook():
-    _SPARCFIRE_DIR = pj(_HOME_DIR, "sparcfire_matt") 
-    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalfitModule")
+    _SPARCFIRE_DIR = pj(_HOME_DIR) #, "SpArcFiRe") 
+    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
 else:
     try:
         _SPARCFIRE_DIR = os.environ["SPARCFIRE_HOME"]
-        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalfitModule")
+        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
     except KeyError:
         # print("SPARCFIRE_HOME is not set. Please run 'setup.bash' inside SpArcFiRe directory if not done so already.")
         # print("Running on the assumption that GalfitModule is in your home directory... (if not this will fail and quit!)") 
-        _MODULE_DIR = pj(_HOME_DIR, "GalfitModule")
+        _MODULE_DIR = pj(_HOME_DIR, "GalaxyMusic", "GalfitModule")
 
 sys.path.append(_MODULE_DIR)
 
 from Functions.helper_functions import *
 
 
-# In[8]:
+# In[4]:
 
 
 class GalfitComponent:
@@ -406,7 +406,7 @@ class GalfitComponent:
     #     return self.__dict__.iteritems()
 
 
-# In[9]:
+# In[5]:
 
 
 class Sersic(GalfitComponent):
@@ -538,7 +538,7 @@ class Sersic(GalfitComponent):
         return
 
 
-# In[10]:
+# In[6]:
 
 
 class Power(GalfitComponent):
@@ -663,7 +663,7 @@ class Power(GalfitComponent):
         return
 
 
-# In[11]:
+# In[7]:
 
 
 class Fourier(GalfitComponent):
@@ -772,7 +772,7 @@ class Fourier(GalfitComponent):
         return
 
 
-# In[12]:
+# In[8]:
 
 
 class Sky(GalfitComponent):
@@ -875,7 +875,7 @@ class Sky(GalfitComponent):
         return
 
 
-# In[13]:
+# In[9]:
 
 
 class GalfitHeader(GalfitComponent):
@@ -1028,14 +1028,14 @@ class GalfitHeader(GalfitComponent):
         return
 
 
-# In[14]:
+# In[10]:
 
 
 if __name__ == "__main__":
     from RegTest.RegTest import *
 
 
-# In[15]:
+# In[11]:
 
 
 # Unit Test for GalfitComponent
@@ -1046,7 +1046,7 @@ if __name__ == "__main__":
         print(k,v)
 
 
-# In[16]:
+# In[12]:
 
 
 if __name__ == "__main__":
@@ -1085,7 +1085,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps""".
     print(header)
 
 
-# In[17]:
+# In[13]:
 
 
 if __name__ == "__main__":
@@ -1129,7 +1129,7 @@ if __name__ == "__main__":
     print(bulge)
 
 
-# In[18]:
+# In[14]:
 
 
 if __name__ == "__main__":
@@ -1169,7 +1169,7 @@ R10) 72.0972    1          #  Sky position angle""".split("\n")
     print(arms)
 
 
-# In[19]:
+# In[15]:
 
 
 if __name__ == "__main__":
@@ -1202,7 +1202,7 @@ F3) -0.0690  -31.8175 1 1  #  Azim. Fourier mode 3, amplitude, & phase angle""".
     print(fourier)
 
 
-# In[20]:
+# In[16]:
 
 
 if __name__ == "__main__":
@@ -1239,7 +1239,7 @@ if __name__ == "__main__":
     print(sky)
 
 
-# In[21]:
+# In[17]:
 
 
 if __name__ == "__main__":

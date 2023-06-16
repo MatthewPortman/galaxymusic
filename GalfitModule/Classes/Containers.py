@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 import os
@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 
 
-# In[2]:
+# In[3]:
 
 
 # For debugging purposes
@@ -31,21 +31,21 @@ def in_notebook():
         return False
 
 
-# In[3]:
+# In[4]:
 
 
 _HOME_DIR = os.path.expanduser("~")
 if in_notebook():
-    _SPARCFIRE_DIR = pj(_HOME_DIR, "sparcfire_matt") 
-    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalfitModule")
+    _SPARCFIRE_DIR = pj(_HOME_DIR) #, "SpArcFiRe")  
+    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
 else:
     try:
         _SPARCFIRE_DIR = os.environ["SPARCFIRE_HOME"]
-        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalfitModule")
+        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
     except KeyError:
         # print("SPARCFIRE_HOME is not set. Please run 'setup.bash' inside SpArcFiRe directory if not done so already.")
         # print("Running on the assumption that GalfitModule is in your home directory... (if not this will fail and quit!)") 
-        _MODULE_DIR = pj(_HOME_DIR, "GalfitModule")
+        _MODULE_DIR = pj(_HOME_DIR, "GalaxyMusic", "GalfitModule")
 
 sys.path.append(_MODULE_DIR)
 
@@ -61,34 +61,34 @@ class ComponentContainer:
     def __init__(self, **kwargs):
         self.bulge   = kwargs.get("bulge", Sersic(1))
         self.disk    = kwargs.get("disk", Sersic(2))
-        self.arms    = kwargs.get("arms", Power(2))
-        self.fourier = kwargs.get("fourier", Fourier(2))
-        self.sky     = kwargs.get("sky", Sky(3))
+#         self.arms    = kwargs.get("arms", Power(2))
+#         self.fourier = kwargs.get("fourier", Fourier(2))
+#         self.sky     = kwargs.get("sky", Sky(3))
         
     def to_dict(self):
         # Order matters
         return {"bulge"   : self.bulge,
-                "disk"    : self.disk,
-                "arms"    : self.arms,
-                "fourier" : self.fourier,
-                "sky"     : self.sky}
+                "disk"    : self.disk},
+#                 "arms"    : self.arms,
+#                 "fourier" : self.fourier,
+#                 "sky"     : self.sky}
     
     def to_tuple(self):
         #self.header,
         return (self.bulge,
-                self.disk,
-                self.arms,
-                self.fourier,
-                self.sky
+                self.disk#,
+#                 self.arms,
+#                 self.fourier,
+#                 self.sky
                )
     
     def to_list(self):
         #self.header,
         return [self.bulge,
-                self.disk,
-                self.arms,
-                self.fourier,
-                self.sky
+                self.disk#,
+#                 self.arms,
+#                 self.fourier,
+#                 self.sky
                ]
     
     def to_pandas(self):
@@ -290,7 +290,7 @@ class OutputContainer(FeedmeContainer):
 
             else:
                 print(f"Did not detect either '{success}' or '{failure}' in galfit output. Something must have gone terribly wrong! Printing output...")
-                print(f"{err_text}")
+                print(f"{galfit_err_text}")
                 self.success = False
         
         if galfit_out_text:
@@ -602,7 +602,7 @@ if __name__ == "__main__":
     #good_output.header.to_file(output_filename, good_output.bulge, good_output.disk, good_output.arms, good_output.fourier, good_output.sky)
 
 
-# In[14]:
+# In[7]:
 
 
 if __name__ == "__main__":

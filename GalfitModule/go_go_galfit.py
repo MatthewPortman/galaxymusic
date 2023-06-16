@@ -8,17 +8,17 @@ _HOME_DIR = os.path.expanduser("~")
 
 try:
     _SPARCFIRE_DIR = os.environ["SPARCFIRE_HOME"]
-    _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalfitModule")
+    _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
 except KeyError:
     # print("SPARCFIRE_HOME is not set. Please run 'setup.bash' inside SpArcFiRe directory if not done so already.")
     # print("Running on the assumption that GalfitModule is in your home directory... (if not this will fail and quit!)") 
-    _MODULE_DIR = pj(_HOME_DIR, "GalfitModule")
+    _MODULE_DIR = pj(_HOME_DIR, "GalaxyMusic", "GalfitModule")
     
 sys.path.append(_MODULE_DIR)
     
 from Classes.Components import *
 from Classes.Containers import *
-from Functions.HelperFunctions import *
+from Functions.helper_functions import *
 from sparc_to_galfit_feedme_gen import *
 
 def check_programs():
@@ -71,9 +71,9 @@ def main(**kwargs):
     
     # Main Directories
     cwd       = kwargs.get("cwd", os.getcwd())
-    in_dir    = kwargs.get("in_dir", pj(cwd, "sparcfire-in"))
-    tmp_dir   = kwargs.get("tmp_dir", pj(cwd, "sparcfire-tmp"))
-    out_dir   = kwargs.get("out_dir", pj(cwd, "sparcfire-out"))
+    in_dir    = kwargs.get("in_dir", pj(cwd, "music-in"))
+    tmp_dir   = kwargs.get("tmp_dir", pj(cwd, "music-tmp"))
+    out_dir   = kwargs.get("out_dir", pj(cwd, "music-out"))
     
     # Should some directory structure change in the future
     tmp_fits_dir = kwargs.get("tmp_fits_dir", pj(tmp_dir, "galfits"))
@@ -97,7 +97,8 @@ def main(**kwargs):
     
     # This PITA brought to you by running things in the notebook environment
     run_galfit, run_fitspng, run_python = check_programs()
-    run_galfit  = kwargs.get("run_galfit", run_galfit)
+    #run_galfit  = kwargs.get("run_galfit", run_galfit)
+    run_galfit  = "/Users/mattbook/GalaxyMusic/GalfitModule/galfit"
     run_fitspng = kwargs.get("run_fitspng", run_fitspng)
     run_python  = kwargs.get("run_python", run_python)
     
@@ -155,7 +156,7 @@ def main(**kwargs):
         # Any galfit runs that feed into an output container *must* have capture_output = True or 
         # they won't update the new parameters
         if num_steps == 1:
-            run_galfit_cmd = f"{base_galfit_cmd} {feedme_info[gname]['path']}"
+            run_galfit_cmd = f"{base_galfit_cmd} {feedme_info[gname].path_to_feedme}"
             final_galfit_output = OutputContainer(sp(run_galfit_cmd), **feedme_info[gname].to_dict())
             
         elif num_steps >= 2:
@@ -246,7 +247,7 @@ def main(**kwargs):
 
             _ = sp(montage_cmd, capture_output = capture_output)
             # Drop a copy in the sparfire-out folder of each galaxy for ease of navigating/viewing
-            shutil.copy2(f"{pj(out_png_dir, gname)}_combined.png", pj(out_dir, gname))
+            #shutil.copy2(f"{pj(out_png_dir, gname)}_combined.png", pj(out_dir, gname))
                 
         else:
             print("Skipping fitspng conversion... there is likely a library (libcfitsio) issue.")

@@ -28,7 +28,7 @@
 # For controlling galfitting via sparcfire
 
 # ***************************************************************
-# In[2]:
+# In[1]:
 
 
 import sys
@@ -40,7 +40,7 @@ import shutil
 import subprocess
 
 
-# In[3]:
+# In[2]:
 
 
 # For debugging purposes
@@ -54,21 +54,21 @@ def in_notebook():
         return False
 
 
-# In[4]:
+# In[3]:
 
 
 _HOME_DIR = os.path.expanduser("~")
 if in_notebook():
-    _SPARCFIRE_DIR = pj(_HOME_DIR, "sparcfire_matt") 
-    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalfitModule")
+    _SPARCFIRE_DIR = pj(_HOME_DIR) #, "SpArcFiRe") 
+    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
 else:
     try:
         _SPARCFIRE_DIR = os.environ["SPARCFIRE_HOME"]
-        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalfitModule")
+        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
     except KeyError:
-        print("SPARCFIRE_HOME is not set. Please run 'setup.bash' inside SpArcFiRe directory if not done so already.")
-        print("Running on the assumption that GalfitModule is in your home directory... (if not this will fail and quit!)") 
-        _MODULE_DIR = pj(_HOME_DIR, "GalfitModule")
+        # print("SPARCFIRE_HOME is not set. Please run 'setup.bash' inside SpArcFiRe directory if not done so already.")
+        # print("Running on the assumption that GalfitModule is in your home directory... (if not this will fail and quit!)") 
+        _MODULE_DIR = pj(_HOME_DIR, "GalaxyMusic", "GalfitModule")
     
 sys.path.append(_MODULE_DIR)
 
@@ -141,7 +141,7 @@ if __name__ == "__main__":
                         action   = 'store',
                         type     = int,
                         choices  = range(1,4),
-                        default  = 2,
+                        default  = 1,
                         help     = 'Run GALFIT using step-by-step component selection (up to 3), i.e. \n \
                                     1: Bulge + Disk + Arms,\n \
                                     2: Bulge -> Bulge + Disk + Arms,\n \
@@ -199,9 +199,9 @@ if __name__ == "__main__":
 
         if len(args.paths) == 1:
             cwd = args.paths[0]
-            in_dir = pj(cwd, "sparcfire-in")
-            tmp_dir = pj(cwd, "sparcfire-tmp")
-            out_dir = pj(cwd, "sparcfire-out")
+            in_dir = pj(cwd, "music-in")
+            tmp_dir = pj(cwd, "music-tmp")
+            out_dir = pj(cwd, "music-out")
             
         elif len(args.paths) == 3:
             in_dir, tmp_dir, out_dir = args.paths[0], args.paths[1], args.paths[2]
@@ -212,9 +212,9 @@ if __name__ == "__main__":
             #print(f"Paths are, {in_dir}, {tmp_dir}, {out_dir}")
             
         else:
-            in_dir = pj(cwd, "sparcfire-in")
-            tmp_dir = pj(cwd, "sparcfire-tmp")
-            out_dir = pj(cwd, "sparcfire-out")
+            in_dir = pj(cwd, "music-in")
+            tmp_dir = pj(cwd, "music-tmp")
+            out_dir = pj(cwd, "music-out")
             print(f"Paths incorrectly specified, defaulting to {cwd} (-in, -tmp, -out)...")
             print(f"{in_dir}\n{tmp_dir}\n{out_dir}")
             print()
@@ -228,10 +228,10 @@ if __name__ == "__main__":
         verbose = False
         capture_output = True
         
-        cwd = cwd.replace("ics-home", username)
-        in_dir = pj(cwd, "sparcfire-in")
-        tmp_dir = pj(cwd, "sparcfire-tmp")
-        out_dir = pj(cwd, "sparcfire-out")
+        #cwd = cwd.replace("ics-home", username)
+        in_dir = pj(cwd, "music-in")
+        tmp_dir = pj(cwd, "music-tmp")
+        out_dir = pj(cwd, "music-out")
         
         sys.path.append(pj(_HOME_DIR, ".local", "bin"))
         

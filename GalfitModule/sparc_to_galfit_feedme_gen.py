@@ -15,7 +15,7 @@
 # 
 # To run the control script: `bash control_script.sh`
 
-# In[2]:
+# In[1]:
 
 
 import numpy as np
@@ -30,7 +30,7 @@ from copy import deepcopy
 from astropy.io import fits
 
 
-# In[3]:
+# In[2]:
 
 
 # For debugging purposes
@@ -44,7 +44,7 @@ def in_notebook():
         return False
 
 
-# In[1]:
+# In[4]:
 
 
 import sys
@@ -54,16 +54,16 @@ from os.path import exists
 
 _HOME_DIR = os.path.expanduser("~")
 if in_notebook():
-    _SPARCFIRE_DIR = pj(_HOME_DIR, "sparcfire_matt") 
-    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalfitModule")
+    _SPARCFIRE_DIR = pj(_HOME_DIR) #, "SpArcFiRe") 
+    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
 else:
     try:
         _SPARCFIRE_DIR = os.environ["SPARCFIRE_HOME"]
-        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalfitModule")
+        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
     except KeyError:
         # print("SPARCFIRE_HOME is not set. Please run 'setup.bash' inside SpArcFiRe directory if not done so already.")
         # print("Running on the assumption that GalfitModule is in your home directory... (if not this will fail and quit!)") 
-        _MODULE_DIR = pj(_HOME_DIR, "GalfitModule")
+        _MODULE_DIR = pj(_HOME_DIR, "GalaxyMusic", "GalfitModule")
     
 sys.path.append(_MODULE_DIR)
 from Classes.Components import *
@@ -99,9 +99,9 @@ from Functions.helper_functions import *
 # Grabbing filepath from command line
 def command_line(top_dir = os.getcwd(), **kwargs): # = True):
     
-    in_dir_out  = kwargs.get("in_dir", pj(top_dir, "sparcfire-in"))
-    tmp_dir_out = kwargs.get("tmp_dir", pj(top_dir, "sparcfire-tmp"))
-    out_dir_out = kwargs.get("out_dir", pj(top_dir, "sparcfire-out"))
+    in_dir_out  = kwargs.get("in_dir", pj(top_dir, "music-in"))
+    tmp_dir_out = kwargs.get("tmp_dir", pj(top_dir, "music-tmp"))
+    out_dir_out = kwargs.get("out_dir", pj(top_dir, "music-out"))
         
     #if not run_as_script:
     #    return in_dir_out, tmp_dir_out, out_dir_out
@@ -613,9 +613,9 @@ def write_to_feedmes(top_dir = "", **kwargs): # single_galaxy_name = "", **kwarg
             est_arcs, inclination, bar_candidate, \
             alpha = galaxy_information(gname, gfolder)
         
-        center_pos_x = float(center_pos_x)
-        center_pos_y = float(center_pos_y)
-        crop_rad = float(crop_rad)
+        center_pos_x = 75 #float(center_pos_x)
+        center_pos_y = 75 #float(center_pos_y)
+        crop_rad = 75 #float(crop_rad)
         
         x1crop = round(center_pos_x - crop_rad)
         x2crop = round(center_pos_x + crop_rad)        
@@ -647,7 +647,7 @@ def write_to_feedmes(top_dir = "", **kwargs): # single_galaxy_name = "", **kwarg
                               output_image = pj(tmp_dir, "galfits", f"{gname}_galfit_out.fits"),
                               pixel_mask = pj(tmp_dir, "galfit_masks", f"{gname}_star-rm.fits"),
                               region_to_fit = (x1crop, x2crop, y1crop, y2crop),
-                              optimize = 0
+                              optimize = 1
                              )
         
         bulge = Sersic(component_number = 1, 
@@ -710,10 +710,10 @@ def write_to_feedmes(top_dir = "", **kwargs): # single_galaxy_name = "", **kwarg
         container = FeedmeContainer(path_to_feedme = pj(gfolder, f"{gname}.in"),
                                     header         = header,
                                     bulge          = bulge, 
-                                    disk           = disk,
-                                    arms           = arms,
-                                    fourier        = fourier,
-                                    sky            = sky)
+                                    disk           = disk) #,
+                                    #arms           = arms,
+                                    #fourier        = fourier,
+                                    #sky            = sky)
         
         container.to_file()
         
@@ -739,13 +739,13 @@ if __name__ == "__main__":
     assert sys.version_info >= (3, 6), out_str
     
     cwd = os.getcwd()
-    if in_notebook():
-        cwd = cwd.replace("ics-home", username)
+#     if in_notebook():
+#         cwd = cwd.replace("ics-home", username)
         
     write_to_feedmes(top_dir = cwd)
 
 
-# In[4]:
+# In[7]:
 
 
 if __name__ == "__main__":

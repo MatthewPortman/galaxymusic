@@ -20,16 +20,16 @@ def in_notebook():
 
 _HOME_DIR = os.path.expanduser("~")
 if in_notebook():
-    _SPARCFIRE_DIR = pj(_HOME_DIR, "sparcfire_matt") 
-    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalfitModule")
+    _SPARCFIRE_DIR = pj(_HOME_DIR) #, "SpArcFiRe") 
+    _MODULE_DIR    = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
 else:
     try:
         _SPARCFIRE_DIR = os.environ["SPARCFIRE_HOME"]
-        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalfitModule")
+        _MODULE_DIR = pj(_SPARCFIRE_DIR, "GalaxyMusic", "GalfitModule")
     except KeyError:
         # print("SPARCFIRE_HOME is not set. Please run 'setup.bash' inside SpArcFiRe directory if not done so already.")
         # print("Running on the assumption that GalfitModule is in your home directory... (if not this will fail and quit!)") 
-        _MODULE_DIR = pj(_HOME_DIR, "GalfitModule")
+        _MODULE_DIR = pj(_HOME_DIR, "GalaxyMusic", "GalfitModule")
 
 sys.path.append(_MODULE_DIR)
 
