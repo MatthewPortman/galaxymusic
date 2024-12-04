@@ -162,3 +162,5 @@ cython_debug/
 old*/
 music-tmp/need_masks
 
+/music-out/galaxy_0
+/music-tmp/galfits
