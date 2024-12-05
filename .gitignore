@@ -164,3 +164,6 @@ music-tmp/need_masks
 
 /music-out/galaxy_0
 /music-tmp/galfits
+/music-out/super
+music-in/super.fits
+/music-out/template
