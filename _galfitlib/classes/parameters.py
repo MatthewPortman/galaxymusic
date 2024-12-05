@@ -1180,7 +1180,7 @@ def load_default_power_parameters(component_number = None):
     )
     
     inclination = NumParameter(
-        0,
+        10,
         name = "inclination",
         parameter_number = "9",
         parameter_prefix = param_prefix,
