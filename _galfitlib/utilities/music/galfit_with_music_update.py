@@ -47,10 +47,10 @@ def galfitting(
     output_filename = output_filename_0.with_stem(f"{output_filename_0.stem}_out_{i}")
 
     header = GalfitHeader(
-            galaxy_name = gname,
-            input_image = input_filename_0,
-            output_image = output_filename,
-            optimize = 1,
+            galaxy_name   = gname,
+            input_image   = input_filename_0,
+            output_image  = output_filename,
+            optimize      = 1,
             region_to_fit = (
                 x_pos - model_offset,
                 x_pos + model_offset - 1,
@@ -71,22 +71,22 @@ def galfitting(
     priority_numbers_and_norm_delta['RMS'] = norm_volume
 
     fourier = music_to_galaxy_properties(
-            bulge_object = bulge,
-            disk_object = disk,
-            arms_object = arms,
+            bulge_object       = bulge,
+            disk_object        = disk,
+            arms_object        = arms,
             dict_modify_values = priority_numbers_and_norm_delta
     )
     fourier.component_number = 2
 
     galaxy_feedme = FeedmeContainer(
             path_to_feedme = feedme,
-            header = header,
-            bulge = bulge,
-            disk = disk,
-            arms = arms,
-            fourier = fourier,
-            sky = Sky(3),
-            load_default = False
+            header         = header,
+            bulge          = bulge,
+            disk           = disk,
+            arms           = arms,
+            fourier        = fourier,
+            sky            = Sky(3),
+            load_default   = False
     )
 
     galaxy_feedme.to_file()
