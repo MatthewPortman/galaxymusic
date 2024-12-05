@@ -13,8 +13,27 @@ def note_converter(
         *args
 ):
     """
-    Performs the calculation to modify the galaxy property
-    if the note is in the dictionary of notes to modify.
+    Evaluates the lambda function to modify the galaxy property
+    using the crucial if-statement to check if the note is in
+    the dictionary of notes to modify.
+
+    Parameters
+    ----------
+    parameter : Parameter
+        The GALFIT parameter to modify
+    lambda_func : function
+        The lambda function to evaluate
+    modify_dict : dict
+        The dictionary of notes used to modify the galaxy property
+    note : str
+        The note (priority number) being used
+    args : list
+        Any additional arguments to pass to the lambda function if used
+        (Fourier modes looking at you)
+
+    Returns
+    -------
+    None
     """
     if note in modify_dict:
         parameter.value =  lambda_func(modify_dict[note], *args)
@@ -29,19 +48,31 @@ def bulge_modify(
         dict_modify_values: dict
 ):
     """
-    Modifies the bulge object based on the dictionary of note values
+    Modifies the bulge object based on the dictionary of note (priority number) values
+
+    Parameters
+    ----------
+    bulge_object : Sersic
+        The galfitlib bulge object to modify
+    dict_modify_values : dict
+        The dictionary of notes (priority numbers) used to modify the galaxy property
+
+    Returns
+    -------
+    None
     """
     # Magnitude is an inverse property
-    magnitude_lambda = lambda x: (12 - 16) * x + 16
+    magnitude_lambda        = lambda x: (12 - 16) * x + 16
     # There is a relationship between effective radius and sersic index
     # so these two together do not follow the same pattern as the others
     effective_radius_lambda = lambda x: (4 - 2) * (1 + x) + 2
     # Traditional bulge value is 4... so a minimum of 2 should be OK
-    sersic_index_lambda = lambda x: (5 - 2) * (1 - x) + 2
-    axis_ratio_lambda = lambda x: (1 - 0.5) * (1 - x) + 0.5
+    sersic_index_lambda     = lambda x: (5 - 2) * (1 - x) + 2
+    axis_ratio_lambda       = lambda x: (1 - 0.5) * (1 - x) + 0.5
     # Nor does this, but it's an angle, it gets a pass.
-    position_angle_lambda = lambda x: 2 * np.arcsin(x) * 180.0 / np.pi
+    position_angle_lambda   = lambda x: 2 * np.arcsin(x) * 180.0 / np.pi
 
+    # Convert all one at a time to check for the existence of the note/priority number
     note_converter(
             bulge_object.magnitude,
             magnitude_lambda,
@@ -74,7 +105,7 @@ def bulge_modify(
             bulge_object.position_angle,
             position_angle_lambda,
             dict_modify_values,
-            '5'
+            '4'
     )
 
 # =============================================================================
@@ -86,7 +117,18 @@ def disk_modify(
         dict_modify_values: dict
 ):
     """
-    Modifies the disk object based on the dictionary of note values
+    Modifies the bulge object based on the dictionary of note (priority number) values
+
+    Parameters
+    ----------
+    disk_object : Sersic
+        The galfitlib disk object to modify
+    dict_modify_values : dict
+        The dictionary of notes (priority numbers) used to modify the galaxy property
+
+    Returns
+    -------
+    None
     """
     # Magnitude is an inverse property
     magnitude_lambda = lambda x: (14 - 16) * x + 16
@@ -130,7 +172,7 @@ def disk_modify(
             disk_object.position_angle,
             position_angle_lambda,
             dict_modify_values,
-            '2'
+            '1'
     )
 
 # =============================================================================
@@ -142,13 +184,24 @@ def arms_modify(
         dict_modify_values: dict
 ):
     """
-    Modifies the arms object based on the dictionary of note values
+    Modifies the bulge object based on the dictionary of note (priority number) values
+
+    Parameters
+    ----------
+    arms_object : Sersic
+        The galfitlib arms object to modify
+    dict_modify_values : dict
+        The dictionary of notes (priority numbers) used to modify the galaxy property
+
+    Returns
+    -------
+    None
     """
-    inner_radius_lambda = lambda x: (15 - 0) * (1 - x) + 0
-    outer_radius_lambda = lambda x: (15 - 0) * (1 + x) + 25
-    cumul_rot_lambda = lambda x: 90 * np.pi / 180 * np.arcsin(x) * 180.0 / np.pi + 90
-    powerlaw_index_lambda = lambda x: (2.5 - -1) * (1 - x) + -1
-    inclination_lambda = lambda x: min(np.arcsin(x) * 180.0 / np.pi, 55)
+    inner_radius_lambda       = lambda x: (15 - 0) * (1 - x) + 0
+    outer_radius_lambda       = lambda x: (15 - 0) * (1 + x) + 25
+    cumul_rot_lambda          = lambda x: 90 * np.pi / 180 * np.arcsin(x) * 180.0 / np.pi + 90
+    powerlaw_index_lambda     = lambda x: (2.5 - -1) * (1 - x) + -1
+    inclination_lambda        = lambda x: min(np.arcsin(x) * 180.0 / np.pi, 55)
     sky_position_angle_lambda = lambda x: 2 * np.arcsin(x) * 180.0 / np.pi
 
     note_converter(
@@ -204,11 +257,25 @@ def fourier_modify(
     Modifies the fourier object based on the dictionary of note values
     Of course, the Fourier modes always complicate things so this is
     much different than the previous.
+
+    Parameters
+    ----------
+    dict_modify_values : dict
+        The dictionary of notes (priority numbers) used to modify the galaxy property
+
+    Returns
+    -------
+    Fourier object
     """
-    num_fourier_modes_lambda = lambda x: (5 - 1) * (1 - x) + 1
-    # formerly (0.05 - 0.001) * (1 - x) + 0.001
-    amplitude_lambda = lambda x, default_amplitude, default_phase_angle: (
-        ((0.75 + x) * default_amplitude),
+    # Max 5, Min 1
+    num_fourier_modes_lambda = lambda x: int((5 - 1) * (1 - x) + 1)
+    # formerly
+    # The FourierMode parameter requires both amplitude and phase angle to be
+    # specified. I use the default phase angle because at this point, there's
+    # already enough going on angle-wise.
+    amplitude_lambda         = lambda x, default_amplitude, default_phase_angle: (
+        #((0.75 + x) * default_amplitude),
+        (0.05 - 0.001) * (1 - x) + 0.001,
         default_phase_angle
     )
 
@@ -217,7 +284,17 @@ def fourier_modify(
     else:
         num_fourier_modes = 2
 
-    fourier_object = Fourier(num_fourier_modes)
+    # Create new modes with amplitude and phase angle lessened as we increase the mode number
+    # This follows general GALFIT convention
+    new_fourier_modes = {
+        num_mode : (
+            0.02 * (num_fourier_modes - num_mode),
+            45 * 1/num_mode
+        )
+        for num_mode in range(1, num_fourier_modes + 1)
+        if num_mode != 2
+    }
+    fourier_object = Fourier(2, n = new_fourier_modes)
 
     count = 5
     for Fmode in fourier_object.parameters.values():
