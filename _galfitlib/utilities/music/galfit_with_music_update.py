@@ -26,34 +26,34 @@ def galfitting(
     Prepares for and runs GALFIT using the modified galaxy properties
 
     Parameters
-        ----------
-        feedme_0 : Path
-            The path to the feedme file
-        input_filename_0 : Path
-            The path to the input FITS file
-        output_filename_0 : Path
-            The path to the output FITS file
-        gname : str
-            The name of the galaxy
-        x_pos : int
-            The x-coordinate of the center of the galaxy
-        y_pos : int
-            The y-coordinate of the center of the galaxy
-        model_offset : int
-            The offset of the model == half the size of the model
-        note_priority_map : dict[str, int]
-            The dictionary of notes and their frequency (aka priority)
-        notes_chunk : list[tuple[str, float]]
-            The list of notes and their normalized frequency differences (deltas)
-        norm_volume : float
-            The normalized volume
-        i : int
-            The looping index for naming files
+    ----------
+    feedme_0 : Path
+        The path to the feedme file
+    input_filename_0 : Path
+        The path to the input FITS file
+    output_filename_0 : Path
+        The path to the output FITS file
+    gname : str
+        The name of the galaxy
+    x_pos : int
+        The x-coordinate of the center of the galaxy
+    y_pos : int
+        The y-coordinate of the center of the galaxy
+    model_offset : int
+        The offset of the model == half the size of the model
+    note_priority_map : dict[str, int]
+        The dictionary of notes and their frequency (aka priority)
+    notes_chunk : list[tuple[str, float]]
+        The list of notes and their normalized frequency differences (deltas)
+    norm_volume : float
+        The normalized volume
+    i : int
+        The looping index for naming files
 
     Returns
-        -------
-        output_filename : Path
-            The path to the output FITS file
+    -------
+    output_filename : Path
+        The path to the output FITS file
     """
     feedme = feedme_0.with_stem(f"{feedme_0.stem}_{i}")
 
