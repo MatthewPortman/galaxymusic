@@ -28,3 +28,23 @@ def record_audio(sampling_frequency, duration):
 # while True:
 #     # Read audio data from stream
 #     data = np.frombuffer(stream.read(1024), dtype=np.float32)
+
+# import pygame
+#
+# def play_audio(file_path):
+#     # Initialize Pygame mixer
+#     pygame.mixer.init()
+#
+#     # Load the audio file
+#     pygame.mixer.music.load(file_path)
+#
+#     # Play the audio file
+#     pygame.mixer.music.play()
+#
+#     # Keep the script running while the audio is playing
+#     while pygame.mixer.music.get_busy():
+#         pygame.time.Clock().tick(10)
+#
+#
+# audio_file = "brown_alma_mater.mp3"
+# play_audio(audio_file)
