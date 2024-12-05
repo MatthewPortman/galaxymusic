@@ -1,3 +1,14 @@
+from pathlib import Path
+from copy import deepcopy
+
+from astropy.io import fits
+import numpy as np
+
+from _galfitlib.functions.helper_functions import sp, RUN_GALFIT
+from _galfitlib.classes.components import Sersic, Power, GalfitHeader, Sky
+from _galfitlib.classes.containers import FeedmeContainer
+from _galfitlib.utilities.music.galaxy_update_by_music import music_to_galaxy_properties
+
 def galfitting(
         feedme_0: Path,
         input_filename_0: Path,
@@ -6,6 +17,7 @@ def galfitting(
         x_pos: int,
         y_pos: int,
         model_offset: int,
+        note_priority_map: dict[str, int],
         notes_chunk: list[tuple[str, float]],
         norm_volume: float,
         i: int
