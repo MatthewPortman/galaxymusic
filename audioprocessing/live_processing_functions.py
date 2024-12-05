@@ -41,7 +41,7 @@ def record_audio(sampling_frequency : int, duration : int) -> np.ndarray:
         The sampling frequency of the audio signal.
     duration : int
         The duration of the audio signal to record.
-        
+
     Returns
     -------
     np.ndarray
