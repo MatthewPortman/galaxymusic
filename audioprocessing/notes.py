@@ -1,4 +1,6 @@
-# # From the twelve-tone tuning system
+# From the twelve-tone tuning system
+# Taken from
+# https://master-studios.com/how-to-program-a-music-note-detector-in-python3-in-27-minutes/
 notes_and_ranges = [
     ['C0', 16.35],
     ['C#0/Db0', 17.32],
