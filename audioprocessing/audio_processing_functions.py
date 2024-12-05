@@ -1,3 +1,6 @@
+import numpy as np
+import librosa
+from scipy import fft
 
 def rms(data, width):
     """
@@ -33,7 +36,7 @@ def select_peaks(
         num_notes_to_check = 10,
         # A blurring parameter
         seconds = 0.01
-) -> list[float]:
+):
     """
     Selects the peaks in the signal
     :param signal:
@@ -97,17 +100,14 @@ def time_step_analysis(signal, sample_rate):
     Analyzes the signal at a given time step
     :param signal:
     :param sample_rate:
-    :param time_array:
-    :param delay:
     :return:
     """
-    signal_cut = signal[t_step - t_step_size: t_step]
-    volume = rms(signal_cut, 2)
+    # Signal is already cut
+    # signal_cut = signal[t_step - t_step_size: t_step]
+    volume = rms(signal, 2)
 
-    selected_peaks = select_peaks(signal_cut, sample_rate)
+    selected_peaks = select_peaks(signal, sample_rate)
     if selected_peaks is None:
         return None, None
 
-    peak_notes = binary_search_ranges(ranges_for_search, selected_peaks)
-
-    return peak_notes, volume
+    return selected_peaks, volume
