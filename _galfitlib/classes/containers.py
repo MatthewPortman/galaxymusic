@@ -32,7 +32,7 @@ import pandas as pd
 # sys.path.append(_MODULE_DIR)
 
 
-from galfitlib.classes.components import *
+from _galfitlib.classes.components import *
 # Relies on relative file hierarchy
 # from galfitlib.functions.helper_functions import *
 

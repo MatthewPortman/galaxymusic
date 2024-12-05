@@ -41,8 +41,8 @@ import imageio.v3 as iio
 # 
 # sys.path.append(_MODULE_DIR)
 
-from galfitlib.classes.containers import *
-from galfitlib.functions.helper_functions import *
+from _galfitlib.classes.containers import *
+from _galfitlib.functions.helper_functions import *
 
 
 # In[ ]:

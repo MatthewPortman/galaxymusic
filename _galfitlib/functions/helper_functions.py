@@ -20,7 +20,7 @@ from types import GeneratorType
 # In[ ]:
 
 
-from galfitlib import __file__ as galfitlib_file
+from _galfitlib import __file__ as galfitlib_file
 LIBRARY_DIR = Path(galfitlib_file).parent.absolute()
 
 

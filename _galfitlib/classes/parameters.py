@@ -7,7 +7,7 @@
 
 
 from copy import deepcopy
-from galfitlib.functions.helper_functions import *
+from _galfitlib.functions.helper_functions import *
 from collections import namedtuple
 
 # Path is inherited from helper_functions

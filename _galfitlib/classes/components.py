@@ -34,7 +34,7 @@ import numpy as np
 
 # from galfitlib.functions.helper_functions import *
 # Parameters imports helper_functions
-from galfitlib.classes.parameters import *
+from _galfitlib.classes.parameters import *
 
 
 # In[ ]:
