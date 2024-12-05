@@ -1,4 +1,6 @@
-from _galfitlib.classes.galaxy_components import Sersic, Power, Fourier, FourierMode
+from _galfitlib.classes.parameters import FourierMode
+from _galfitlib.classes.components import Sersic, Power, Fourier
+import numpy as np
 
 # =============================================================================
 # ====================== CONVERTER HELPER FUNC ================================
