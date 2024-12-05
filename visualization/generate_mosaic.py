@@ -1,49 +1,33 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def generate_mosaic(image_array, filename = "mosaic.png"):
-    plt.clf()
-    # Create a figure and subplots
-    fig, ax1 = plt.subplots(1, 1, figsize=(10, 10))
+def generate_mosaic(image_array, fig = None, ax = None, filename = "mosaic.png"):
+    if fig is None or ax is None:
+        # Clear any existing plots
+        plt.clf()
+
+        # Create a figure and subplots
+        fig, ax = plt.subplots(1, 1, figsize = (10, 10))
 
     # Performing a logarithmic transformation of the image data
     scaling_constant = 255/np.log(1 + np.max(image_array))
 
     # Display the FITS image after scaling
-    # image_fits = ax1.imshow(scaling_constant * np.log(1 + image_data_fits), cmap='gray')
-    _ = ax1.imshow(scaling_constant * np.log(1 + image_array), cmap='gray')
+    # image_fits = ax.imshow(scaling_constant * np.log(1 + image_data_fits), cmap='gray')
+    _ = ax.imshow(scaling_constant * np.log(1 + image_array), cmap='gray')
 
-    # Create a slider widget for the FITS image
-    # slider_fits = widgets.FloatSlider(value = 1.0, min = 0.0, max = 2.0, step=0.01, description='FITS Scale:', continuous_update=True)
-
-    # Function to update the FITS image when slider value changes
-    # def update_image_fits(change):
-    #     # Update the image data based on the slider value
-    #     new_image_data_fits = change.new * np.log(1 + image_data_fits)
-    #
-    #     # Update the FITS image with new data
-    #     image_fits.set_data(new_image_data_fits)
-    #
-    #     # Redraw the figure
-    #     fig.canvas.draw()
-
-    # Attach the update_image_fits function to the FITS slider's value change event
-    # slider_fits.observe(update_image_fits, 'value')
-
-    # Display the slider widgets
-    # display(widgets.HBox([slider_fits])) #, slider_array]))
-
-    # Add any additional customization you need to the subplots
-    ax1.set_title('FITS Image')
-    ax1.set_xlabel('X-axis')
-    ax1.set_ylabel('Y-axis')
-    ax1.invert_yaxis()
+    ax.set_title('Galaxy Mosaic')
+    # ax.set_xlabel('X-axis')
+    # ax.set_ylabel('Y-axis')
+    ax.invert_yaxis()
 
     # Show the plot
     # plt.show()
-    fig.savefig(filename, dpi = fig.dpi)
 
-    return fig
+    # Save the plot
+    _ = fig.savefig(filename, dpi = fig.dpi, bbox_inches = 'tight')
+
+    return fig, ax
 
 # from PIL import Image
 #
