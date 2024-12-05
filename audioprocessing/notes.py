@@ -112,11 +112,19 @@ notes_and_ranges = [
     ['B8', 7902.13],
 ]
 
-def create_note_dict_ranges(notes):
+def create_note_dict_ranges(notes : list) -> list[dict]:
     """
     Creates an alternate representation of the above list of lists.
-    :param notes:
-    :return:
+
+    Parameters
+    ----------
+    notes : list
+        List of lists containing the note names and their frequencies.
+
+    Returns
+    -------
+    list
+        List of dictionaries containing the start and end frequencies of each note.
     """
     note_dict_ranges = {}
     previous_tone_number = "0"
