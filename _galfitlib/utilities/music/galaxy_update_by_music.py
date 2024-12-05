@@ -279,6 +279,7 @@ def fourier_modify(
         default_phase_angle
     )
 
+    # Default is 2 modes, F1, F3 (F2 is degenerate with the Power function).
     if '1' in dict_modify_values:
         num_fourier_modes = num_fourier_modes_lambda(dict_modify_values['1'])
     else:
@@ -296,7 +297,9 @@ def fourier_modify(
     }
     fourier_object = Fourier(2, n = new_fourier_modes)
 
-    count = 5
+    # Modify the Fourier modes individually. And rather than select
+    # priority numbers for each, I iterate up from the count value.
+    count = 3
     for Fmode in fourier_object.parameters.values():
         if isinstance(Fmode, FourierMode):
             note_converter(
@@ -319,43 +322,28 @@ def music_to_galaxy_properties(
         bulge_object: Sersic,
         disk_object: Sersic,
         arms_object: Power,
-        # fourier_object : Fourier,
         dict_modify_values: dict
 ):
     """
-    KEY:
-    PRIORITY - GALAXY PROPERTY
+    Modifies the galaxy properties based on the dictionary of note values as (generally) follows:
+    (max_value - min_value) * (1 +/- normalized_note_value) + min_value
 
-    BULGE
-    2 – ‘Magnitude’ [10,16] -> Linearly [0,1] | Set: 15 | Direction: Longer -> Lower Value
-    4 – ‘Effective Radius’ [0, 75] | Set: 3 | Direction: Longer -> Higher Value
-    7 – ‘Sersic Index’ [0.1, 8] (linear-ish scaling) | Set: 1.0 | Direction: Longer -> Higher Value
-    8 – ‘Axis Ratio’ [0.5, 1] | Set: 1.0 | Direction: Longer -> Lower Value
-    6 – ‘Position Angle’ [0.5, 1] | Set: 1.0 | Direction: Longer -> Lower Value
+    Parameters
+    ----------
+    bulge_object : Sersic
+        The galfitlib bulge object to modify
+    disk_object : Sersic
+        The galfitlib disk object to modify
+    arms_object : Power
+        The galfitlib arms object to modify
+    dict_modify_values : dict
+        The dictionary of notes (priority numbers) used to modify the galaxy property
 
-    DISK
-    2   – ‘Magnitude’ [10, 16] -> Linearly [0, 1] | Set: 15 | Direction: Longer -> Lower Value
-    RMS – ‘Eff_Rad’ [0, 75] | Set: 20 | Direction: Longer -> Higher Value
-    1   – ‘Sersic_Index’ [0.1, 8] (linear-ish scaling) | Set: 1.0 | Direction: Longer -> Higher Value
-    3   – ‘Pos_Angle’ [0, 180] -> [0,1] Sin(theta/2) | Set: 0 | Direction: Longer -> Higher Value
-    4   – ‘Axis_Ratio’ [0.5, 1] | Set: 1.0 | Direction: Longer -> Lower Value
-
-    ARMS
-    6   - spiral inner radius
-    RMS - spiral outer radius
-    4   - cumulative rotation
-    5   - spiral power law
-    7   - inclination
-    6   - position angle
-
-    FOURIER
-    3   - # of fourier modes
-    9   - strength of fourier modes
+    Returns
+    -------
+    Fourier object
+        As initialized by the music
     """
-    # Modification of the galaxy properties based on the music notes
-    # As (generally) follows:
-    # (max_value - min_value) * (1 +/- normalized_note_value) + min_value
-
     # BULGE
     bulge_modify(bulge_object, dict_modify_values)
 
