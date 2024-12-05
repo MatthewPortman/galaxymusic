@@ -141,15 +141,19 @@ def create_note_dict_ranges(notes : list) -> list[dict]:
         note_letter_1 = name
         note_letter_2 = None
 
+        # If there is a slash in the name, it is a frequency with two possible names
         if "/" in name:
             note_letter_1, note_letter_2 = name.split("/")
             # note_letter_1 = note_letter_1[0]
             # note_letter_2 = note_letter_2[0]
 
+            # Note 1 has to exist (iterating in order)
+            # Note 2 will not.
             note_dict_ranges[note_letter_1].append(freq)
             note_dict_ranges[note_letter_2] = [freq]
 
         else:
+            # Avoid overwriting note and range if it already exists
             if note_letter_1 not in note_dict_ranges:
                 note_dict_ranges[note_letter_1] = [freq]
             else:
@@ -158,6 +162,7 @@ def create_note_dict_ranges(notes : list) -> list[dict]:
         previous_tone_number = current_tone_number
         previous_name = name
 
+    # Reformat the results to be used by the binary search function.
     ranges_for_search = [
         {
             "start": freqs[0],
