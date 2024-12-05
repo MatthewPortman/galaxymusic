@@ -9,7 +9,21 @@ from _galfitlib.functions.helper_functions import pj, exists
 from _galfitlib.utilities.music.galfit_with_music_update import galfitting, process_galfit_output
 from audioprocessing.audio_processing_functions import load_audio, time_step_analysis
 
-def play_audio(signal, sample_rate):
+def play_audio(signal : np.ndarray, sample_rate : int) -> None:
+    """
+    Play the audio signal using the sounddevice library.
+
+    Parameters
+    ----------
+    signal : np.ndarray
+        The audio signal to play.
+    sample_rate : int
+        The sample rate of the audio signal.
+
+    Returns
+    -------
+    None
+    """
     # Play the audio file
     sd.play(signal, sample_rate)
 
@@ -17,7 +31,22 @@ def play_audio(signal, sample_rate):
     sd.wait()
 
 
-def record_audio(sampling_frequency, duration):
+def record_audio(sampling_frequency : int, duration : int) -> np.ndarray:
+    """
+    Record audio using the sounddevice library.
+
+    Parameters
+    ----------
+    sampling_frequency : int
+        The sampling frequency of the audio signal.
+    duration : int
+        The duration of the audio signal to record.
+        
+    Returns
+    -------
+    np.ndarray
+        The recorded audio signal.
+    """
     # Some nifty ideas here
     # https://daehnhardt.com/blog/2023/03/05/python-audio-signal-processing-with-librosa/
     recording = sd.rec(
