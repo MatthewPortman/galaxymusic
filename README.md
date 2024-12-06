@@ -2,6 +2,10 @@
 
 Making galaxies with music and hopefully... eventually... music with galaxies.
 
+![Example Galaxy Mosaic](example_mosaic.jpg)
+
+This image brought to you by the Brown University Alma Mater.
+
 ## Overview
 
 GalaxyMusic is the prototype of a Python library that allows you to create visualizations of 
@@ -28,9 +32,9 @@ git clone https://github.com/matthewportman/galaxymusic.git
 cd galaxymusic
 
 pip install -r requirements.txt
-
 ```
 
+`galaxymusic` also needs `ffmpeg` to generate the final mosaic video.
 ## Usage
 
 [//]: # (### Generating Galaxy Animations)
@@ -61,6 +65,15 @@ To create a galaxy mosaic, open the `galaxy_music.ipynb` notebook in a jupyter
 installation of your choice. Modify the hyperparameter `music_filename` to select
 the music file you would like to process. Then run the notebook to generate a galaxy
 mosaic synchronized and informed by the music.
+
+For more details, see the documentation inside `galaxy_music.ipynb`.
+
+Note, galaxymusic contains some utilization of the galfitlib library, which is not
+yet ready for distribution. A local copy is included in the repository. A few of the modules
+used in `galaxy_music.ipynb` can be found there in the `utilities/music` directory. 
+Any additional utility used throughout is from functionality included in the library itself.
+
+[//]: # (### Adding Galaxies to a Mosaic)
 
 [//]: # (To create a galaxy mosaic, use the `add_galaxy_to_mosaic` function:)
 
@@ -122,3 +135,8 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 ## Contact
 
 For any questions or inquiries, please contact [portmanm@uci.edu](portmanm@uci.edu).
+
+## Acknowledgements
+Special thanks to Matthew Hopkins for his help with the FFT/Signal Processing code and 
+several others of the original hack day team that helped to inform the initial versions of 
+this script. 
