@@ -141,7 +141,8 @@ def process_galfit_output(
         x_pos: int,
         y_pos: int,
         model_dim: int,
-        model_offset: int
+        model_offset: int,
+        log_scale = True
 ) -> np.ndarray:
     """
     Processes the output from GALFIT. Notably does not use the galfitlib since the
@@ -163,6 +164,9 @@ def process_galfit_output(
         The (square) dimension of the model
     model_offset : int
         The offset of the model == half the size of the model
+    log_scale : bool
+        Whether to perform a logarithmic transformation of the image data
+        before outputting it
 
     Returns
     -------
@@ -180,6 +184,11 @@ def process_galfit_output(
                     fits_file[0].header["3_SKY"].split("+")[0].strip()
             )
     )
+
+    if log_scale:
+        # Performing a logarithmic transformation of the image data
+        scaling_constant = 255 / np.log1p(np.max(image_data_fits))
+        image_data_fits = scaling_constant * np.log1p(image_data_fits)
 
     # Reposition to use the bottom left corner of the image as the origin for inserting
     # into the dummy array
