@@ -1,6 +1,6 @@
 # GalaxyMusic
 
-Making galaxies with music and music with galaxies.
+Making galaxies with music and hopefully... eventually... music with galaxies.
 
 ## Overview
 
@@ -33,51 +33,83 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Generating Galaxy Animations
+[//]: # (### Generating Galaxy Animations)
 
-To generate a galaxy animation, use the `generate_animation` function:
+[//]: # ()
+[//]: # (To generate a galaxy animation, use the `generate_animation` function:)
 
-```python
-from galaxymusic import generate_animation
+[//]: # ()
+[//]: # (```python)
 
-# Example usage
-all_images = [...]  # List of numpy arrays representing galaxy images
-time_step = 0.5  # Time step in seconds
+[//]: # (from galaxymusic import generate_animation)
 
-generate_animation(all_images, time_step, filename="mosaic.gif")
-```
+[//]: # ()
+[//]: # (# Example usage)
+
+[//]: # (all_images = [...]  # List of numpy arrays representing galaxy images)
+
+[//]: # (time_step = 0.5  # Time step in seconds)
+
+[//]: # ()
+[//]: # (generate_animation&#40;all_images, time_step, filename="mosaic.gif"&#41;)
+
+[//]: # (```)
 
 ### Creating a Galaxy Mosaic
 
-To create a galaxy mosaic, use the `add_galaxy_to_mosaic` function:
+To create a galaxy mosaic, open the `galaxy_music.ipynb` notebook in a jupyter
+installation of your choice. Modify the hyperparameter `music_filename` to select
+the music file you would like to process. Then run the notebook to generate a galaxy
+mosaic synchronized and informed by the music.
 
-```python
-from galaxymusic import add_galaxy_to_mosaic
+[//]: # (To create a galaxy mosaic, use the `add_galaxy_to_mosaic` function:)
 
-# Example usage
-frame = 1
-all_images = [...]  # List of numpy arrays representing galaxy images
-lengthening_factor = 3
-plot_image = None  # Initialize plot_image as needed
+[//]: # ()
+[//]: # (```python)
 
-add_galaxy_to_mosaic(frame, all_images, lengthening_factor, plot_image, save=True, filename="mosaic.jpg")
-```
+[//]: # (from galaxymusic import add_galaxy_to_mosaic)
 
-### Integrating Music
+[//]: # ()
+[//]: # (# Example usage)
 
-To integrate music with your galaxy visualizations, use the `ffmpeg` command to combine images and audio:
+[//]: # (frame = 1)
 
-```python
-from subprocess import run as sp
+[//]: # (all_images = [...]  # List of numpy arrays representing galaxy images)
 
-# Example usage
-mosaic_image_prefix = "path/to/mosaic"
-music_filename = "path/to/music.mp3"
-output_video = "path/to/output_video.mp4"
+[//]: # (lengthening_factor = 3)
 
-ffmpeg_command = f"ffmpeg -framerate 4 -i {mosaic_image_prefix}_%d.jpg -i {music_filename} {output_video}"
-process = sp(ffmpeg_command, shell=True)
-```
+[//]: # (plot_image = None  # Initialize plot_image as needed)
+
+[//]: # ()
+[//]: # (add_galaxy_to_mosaic&#40;frame, all_images, lengthening_factor, plot_image, save=True, filename="mosaic.jpg"&#41;)
+
+[//]: # (```)
+
+[//]: # (### Integrating Music)
+
+[//]: # ()
+[//]: # (To integrate music with your galaxy visualizations, use the `ffmpeg` command to combine images and audio:)
+
+[//]: # ()
+[//]: # (```python)
+
+[//]: # (from subprocess import run as sp)
+
+[//]: # ()
+[//]: # (# Example usage)
+
+[//]: # (mosaic_image_prefix = "path/to/mosaic")
+
+[//]: # (music_filename = "path/to/music.mp3")
+
+[//]: # (output_video = "path/to/output_video.mp4")
+
+[//]: # ()
+[//]: # (ffmpeg_command = f"ffmpeg -framerate 4 -i {mosaic_image_prefix}_%d.jpg -i {music_filename} {output_video}")
+
+[//]: # (process = sp&#40;ffmpeg_command, shell=True&#41;)
+
+[//]: # (```)
 
 ## Contributing
 
@@ -89,4 +121,4 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 
 ## Contact
 
-For any questions or inquiries, please contact [portmanm@uci.edu].
+For any questions or inquiries, please contact [portmanm@uci.edu](portmanm@uci.edu).
