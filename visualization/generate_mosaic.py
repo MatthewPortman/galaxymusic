@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 def init():
+    """
+    Initialize the plot. Necessary for blitting.
+    """
     plot_image.set_data(np.zeros((height, width)))
     plot_image.set_alpha(0)
     return plot_image,
@@ -37,6 +40,31 @@ def add_galaxy_to_mosaic(
         save_alpha      = np.ones((1000,1000)),
         secondary_image = None
 ) -> tuple[plt.imshow]:
+    """
+    Plot and/or add a galaxy to a mosaic of galaxies
+
+    Parameters
+    ----------
+    frame : int
+        The frame number to plot
+    all_images : list[np.ndarray]
+        The list of all images to plot
+    lengthening_factor : int
+        The factor by which to lengthen the frame
+    save : bool
+        Whether to save the image and overplot galaxy
+    filename : str
+        The filename to save the image and overplot galaxy to
+    save_alpha : np.ndarray
+        The alpha array for the overplot galaxy to fade it
+    secondary_image : np.ndarray
+        The secondary image to overplot the galaxy
+
+    Returns
+    -------
+    tuple[plt.imshow]
+        The plot image object
+    """
     # Clear any existing plots
     plt.clf()
 
@@ -89,6 +117,20 @@ def generate_animation(
         time_step,
         filename = "animation.gif"
 ):
+    """
+    Generate an animation of a mosaic of galaxies.
+    Too slow, has been deprecated in favor of ffmpeg.
+
+    Parameters
+    ----------
+    all_images : list[np.ndarray]
+        The list of all images to plot
+    time_step : int
+        The time step between each frame
+    filename : str
+        The filename to save the animation to
+    """
+
     # Clear any existing plots
     plt.clf()
     # Create a figure
