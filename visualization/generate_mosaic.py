@@ -29,35 +29,19 @@ def init():
 #     return alphas
 
 def add_galaxy_to_mosaic(
-        frame,
-        all_images,
-        lengthening_factor,
-        save       = False,
-        filename   = "mosaic.jpg",
-        save_alpha = 1,
+        frame              : int,
+        all_images         : list[np.ndarray],
+        lengthening_factor : int,
+        save            = False,
+        filename        = "mosaic.jpg",
+        save_alpha      = np.ones((1000,1000)),
         secondary_image = None
-):
+) -> tuple[plt.imshow]:
+    # Clear any existing plots
+    plt.clf()
 
     image_index = frame // lengthening_factor
     image_array = all_images[image_index]
-
-    # Performing a logarithmic transformation of the image data
-    #scaling_constant = 255/np.log(1 + np.max(image_array))
-
-    # For fading in
-    # Gradually increase alpha from 0 to 1 after initial frame
-    #
-    # elif frame % 3 == 0:
-    #     alpha = 0
-    #
-    # #elif frame % 3 == 1:
-    # #    alpha = 0.5
-    #
-    # elif (frame % 3) != 0:
-    #     alpha = min((frame / 3), 1)
-    #
-    # else:
-    #     alpha = 1
 
     alpha = min((frame % lengthening_factor) / (lengthening_factor / 2), 1)
     if frame <= lengthening_factor:
@@ -83,8 +67,8 @@ def add_galaxy_to_mosaic(
     # plt.show()
 
     if save:
-        alpha = save_alpha
-        _ = ax.imshow(secondary_image, cmap = 'gray', alpha = alpha)
+        # Display the secondary image (overplotted faded new galaxy) image
+        new_plot_image = ax.imshow(secondary_image, cmap = 'gray', alpha = save_alpha)
 
         ax.axis('off')
 
