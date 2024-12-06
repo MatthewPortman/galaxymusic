@@ -1,0 +1,14 @@
+numpy
+sounddevice
+ffmpeg-python
+joblib
+matplotlib
+scipy
+shutil
+pathlib
+random
+IPython
+pyaudio
+librosa
+astropy
+subprocess
