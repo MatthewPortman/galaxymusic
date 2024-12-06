@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from pathlib import Path
 
 def init():
     """
@@ -36,7 +37,7 @@ def add_galaxy_to_mosaic(
         all_images         : list[np.ndarray],
         lengthening_factor : int,
         save            = False,
-        filename        = "mosaic.jpg",
+        filename        = Path("mosaic.jpg"),
         save_alpha      = np.ones((1000,1000)),
         secondary_image = None
 ) -> tuple[plt.imshow]:
