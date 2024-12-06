@@ -3,6 +3,7 @@ from copy import deepcopy
 
 from astropy.io import fits
 import numpy as np
+from random import seed, randint
 
 from _galfitlib.functions.helper_functions import sp, RUN_GALFIT
 from _galfitlib.classes.components import Sersic, Power, GalfitHeader, Sky
@@ -14,13 +15,14 @@ def galfitting(
         input_filename_0: Path,
         output_filename_0: Path,
         gname: str,
-        x_pos: int,
-        y_pos: int,
+        height : int,
+        width  : int,
         model_offset: int,
         note_priority_map: dict[str, int],
         notes_chunk: list[tuple[str, float]],
         norm_volume: float,
-        i: int
+        i: int,
+        seed_value = None
 ):
     """
     Prepares for and runs GALFIT using the modified galaxy properties
@@ -35,10 +37,10 @@ def galfitting(
         The path to the output FITS file
     gname : str
         The name of the galaxy
-    x_pos : int
-        The x-coordinate of the center of the galaxy
-    y_pos : int
-        The y-coordinate of the center of the galaxy
+    height : int
+        The height of the image
+    width : int
+        The width of the image
     model_offset : int
         The offset of the model == half the size of the model
     note_priority_map : dict[str, int]
@@ -49,6 +51,8 @@ def galfitting(
         The normalized volume
     i : int
         The looping index for naming files
+    seed_value : int
+        The seed value for the random number generator
 
     Returns
     -------
@@ -56,6 +60,15 @@ def galfitting(
         The path to the output FITS file
     """
     feedme = feedme_0.with_stem(f"{feedme_0.stem}_{i}")
+
+    # Leaving this as such can allow me to debug things later
+    # Based on their coordinates in the image
+    seed(seed_value)
+    x_pos = randint(model_offset, width  - model_offset)
+    y_pos = randint(model_offset, height - model_offset)
+
+    if seed_value:
+        seed_value += 1
 
     position = (x_pos, y_pos)
 
@@ -131,7 +144,16 @@ def galfitting(
     # Running GALFIT via subprocess
     _ = sp(f"{RUN_GALFIT} {feedme}")
 
-    return output_filename
+    # Conveniently everything for process_galfit_output
+    return (
+        output_filename,
+        height,
+        width,
+        x_pos,
+        y_pos,
+        model_offset * 2,
+        model_offset
+    )
 
 
 def process_galfit_output(
