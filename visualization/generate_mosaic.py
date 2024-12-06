@@ -7,35 +7,57 @@ def init():
     plot_image.set_alpha(0)
     return plot_image,
 
-def add_galaxy_to_mosaic(frame, all_images):
+def calculate_alpha(dim):
+    # As a triangular matrix
+    alphas = np.zeros((dim, dim))
+    lower_triangular = np.tril_indices(dim)
+    # lower_triangular_add_on = np.tril_indices(cols - 1)
+    lowest_row = [1 - (i / dim) for i in range(dim)]
+    add_on = np.tile(lowest_row, (dim, 1))
+    for pos in zip(*lower_triangular):
+        x = pos[0]
+        y = pos[1]
+        alpha = (x - y) / (dim - 1)
+        alphas[pos] = min(alpha, 1)
+
+        add_on[x, :] += 1 / (dim - 1)
+
+    last_add_on = np.ones((dim , dim))
+    alphas = np.vstack((alphas, add_on, last_add_on))
+    alphas[alphas > 1] = 1
+
+    return alphas
+
+def add_galaxy_to_mosaic(frame, all_images, alphas):
 
     image_index = frame // 3
-    image_array = all_images[image_index]
+    image_array = all_images[:image_index]
 
     # Performing a logarithmic transformation of the image data
     #scaling_constant = 255/np.log(1 + np.max(image_array))
 
     # For fading in
     # Gradually increase alpha from 0 to 1 after initial frame
-    if frame == 0:
-        alpha = 1
+    # if frame == 0:
+    #     alpha = 1
+    #
+    # elif frame % 3 == 0:
+    #     alpha = 0
+    #
+    # #elif frame % 3 == 1:
+    # #    alpha = 0.5
+    #
+    # elif (frame % 3) != 0:
+    #     alpha = min((frame / 3), 1)
+    #
+    # else:
+    #     alpha = 1
 
-    elif frame % 3 == 0:
-        alpha = 0
-
-    #elif frame % 3 == 1:
-    #    alpha = 0.5
-
-    elif (frame % 3) != 0:
-        alpha = min((frame / 3), 1)
-
-    else:
-        alpha = 1
-
-    #plot_image.set_alpha(alpha)
+    plot_image = ax.imshow(np.zeros((height, width)), cmap = "gray", alpha = 1)
 
     # Display the FITS image after scaling
-    plot_image = ax.imshow(image_array, cmap = 'gray', alpha = alpha)
+    for i, image in enumerate(image_array):
+        plot_image = ax.imshow(image, cmap = 'gray', alpha = alphas[frame, i])
     # _ = ax.imshow(scaling_constant * np.log(1 + image_array), cmap='gray')
 
     # Show the plot
@@ -54,7 +76,7 @@ def generate_animation(
     # Clear any existing plots
     plt.clf()
     # Create a figure
-    #global ax, plot_image, height, width
+    global ax, plot_image, height, width
     fig, ax = plt.subplots()
 
     ax.set_title('Galaxy Mosaic')
@@ -63,57 +85,19 @@ def generate_animation(
     ax.invert_yaxis()
     # Create an animation
 
-    #height, width = np.shape(all_images[0])
-    #plot_image = ax.imshow(np.zeros((height, width)), cmap = "gray", alpha = 1)
+    height, width = np.shape(all_images[0])
+    plot_image = ax.imshow(np.zeros((height, width)), cmap = "gray", alpha = 1)
 
-    # ims is a list of lists, each row is a list of artists to draw in the
-    # current frame; here we are just animating one artist, the image, in
-    # each frame
-    ims = []
-    previous_images = []
+    alphas = calculate_alpha(len(all_images))
 
-    # show an initial image first
-    ax.imshow(all_images[0], alpha = 1, cmap = "gray")
-
-    num_images = len(all_images)
-    dim = num_images * 2
-    initial_alphas = np.zeros((dim, dim))
-    lower_triangular = np.tril_indices(dim)
-    # lower_triangular_add_on = np.tril_indices(cols - 1)
-    lowest_row = [1 - (i / dim) for i in range(dim)]
-    add_on = np.tile(lowest_row, (dim, 1))
-    for pos in zip(*lower_triangular):
-        x = pos[0]
-        y = pos[1]
-        alpha = (x - y) / (dim - 1)
-        initial_alphas[pos] = min(alpha, 1)
-
-        add_on[x, :] += 1 / (dim - 1)
-
-    #last_add_on = np.ones(((dim - 1), dim))
-    initial_alphas = np.vstack((initial_alphas, add_on)) #, last_add_on))
-    initial_alphas[initial_alphas > 1] = 1
-
-    all_images_for_animation = np.array([all_images] * len(all_images))
-    ims = [
-        [
-            ax.imshow(
-                    all_images_for_animation[r, c],
-                    animated = True,
-                    alpha = alpha,
-                    cmap = "gray"
-            )
-        ]
-        for r, row in enumerate(initial_alphas)
-        for c, alpha in enumerate(row)
-    ]
-
-    ani = animation.ArtistAnimation(
+    ani = animation.FuncAnimation(
             fig,
-            ims,
-            #add_galaxy_to_mosaic,
-            interval = time_step * 100, # milliseconds
-            blit = True
+            add_galaxy_to_mosaic,
+            init_func = init,
+            frames    = len(all_images) * 3,
+            fargs     = (all_images, alphas,),
+            interval  = time_step * 100, # milliseconds
+            blit      = True
     )
 
     ani.save(filename, writer = 'imagemagick')
