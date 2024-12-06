@@ -7,39 +7,45 @@ def init():
     plot_image.set_alpha(0)
     return plot_image,
 
-def calculate_alpha(dim):
-    # As a triangular matrix
-    alphas = np.zeros((dim, dim))
-    lower_triangular = np.tril_indices(dim)
-    # lower_triangular_add_on = np.tril_indices(cols - 1)
-    lowest_row = [1 - (i / dim) for i in range(dim)]
-    add_on = np.tile(lowest_row, (dim, 1))
-    for pos in zip(*lower_triangular):
-        x = pos[0]
-        y = pos[1]
-        alpha = (x - y) / (dim - 1)
-        alphas[pos] = min(alpha, 1)
+# def calculate_alpha(dim):
+#     # As a triangular matrix
+#     alphas = np.zeros((dim, dim))
+#     lower_triangular = np.tril_indices(dim)
+#     # lower_triangular_add_on = np.tril_indices(cols - 1)
+#     lowest_row = [1 - (i / dim) for i in range(dim)]
+#     add_on = np.tile(lowest_row, (dim, 1))
+#     for pos in zip(*lower_triangular):
+#         x = pos[0]
+#         y = pos[1]
+#         alpha = (x - y) / (dim - 1)
+#         alphas[pos] = min(alpha, 1)
+#
+#         add_on[x, :] += 1 / (dim - 1)
+#
+#     last_add_on = np.ones((dim , dim))
+#     alphas = np.vstack((alphas, add_on, last_add_on))
+#     alphas[alphas > 1] = 1
+#
+#     return alphas
 
-        add_on[x, :] += 1 / (dim - 1)
+def add_galaxy_to_mosaic(
+        frame,
+        all_images,
+        lengthening_factor,
+        save       = False,
+        filename   = "mosaic.jpg",
+        save_alpha = 1,
+        secondary_image = None
+):
 
-    last_add_on = np.ones((dim , dim))
-    alphas = np.vstack((alphas, add_on, last_add_on))
-    alphas[alphas > 1] = 1
-
-    return alphas
-
-def add_galaxy_to_mosaic(frame, all_images, alphas):
-
-    image_index = frame // 3
-    image_array = all_images[:image_index]
+    image_index = frame // lengthening_factor
+    image_array = all_images[image_index]
 
     # Performing a logarithmic transformation of the image data
     #scaling_constant = 255/np.log(1 + np.max(image_array))
 
     # For fading in
     # Gradually increase alpha from 0 to 1 after initial frame
-    # if frame == 0:
-    #     alpha = 1
     #
     # elif frame % 3 == 0:
     #     alpha = 0
@@ -53,18 +59,44 @@ def add_galaxy_to_mosaic(frame, all_images, alphas):
     # else:
     #     alpha = 1
 
-    plot_image = ax.imshow(np.zeros((height, width)), cmap = "gray", alpha = 1)
+    alpha = min((frame % lengthening_factor) / (lengthening_factor / 2), 1)
+    if frame <= lengthening_factor:
+        alpha = 1
+
+    if save:
+        # Thanks to this answer for the help (issue saving square image)
+        # https://stackoverflow.com/a/34769840
+        dpi = 100
+        height, width = np.shape(image_array)
+
+        # Size of the figure to fit the image
+        figsize = width / float(dpi), height / float(dpi)
+
+        # Create a figure of the right size with one axes that takes up the full figure
+        fig = plt.figure(figsize = figsize)
+        ax  = fig.add_axes([0, 0, 1, 1])
 
     # Display the FITS image after scaling
-    for i, image in enumerate(image_array):
-        plot_image = ax.imshow(image, cmap = 'gray', alpha = alphas[frame, i])
-    # _ = ax.imshow(scaling_constant * np.log(1 + image_array), cmap='gray')
+    plot_image = ax.imshow(image_array, cmap='gray', alpha = alpha)
 
     # Show the plot
     # plt.show()
 
-    # Save the plot
-    #_ = fig.savefig(filename, dpi = fig.dpi, bbox_inches = 'tight')
+    if save:
+        alpha = save_alpha
+        _ = ax.imshow(secondary_image, cmap = 'gray', alpha = alpha)
+
+        ax.axis('off')
+
+        plt.gcf().set_size_inches(5, 5)
+        # Save the plot
+        _ = fig.savefig(
+                filename,
+                dpi = dpi,
+                bbox_inches = 'tight',
+                pad_inches = 0.0
+        )
+        plt.close(fig)
 
     return plot_image,
 
@@ -76,7 +108,7 @@ def generate_animation(
     # Clear any existing plots
     plt.clf()
     # Create a figure
-    global ax, plot_image, height, width
+    global ax, fig, plot_image, height, width
     fig, ax = plt.subplots()
 
     ax.set_title('Galaxy Mosaic')
@@ -88,15 +120,17 @@ def generate_animation(
     height, width = np.shape(all_images[0])
     plot_image = ax.imshow(np.zeros((height, width)), cmap = "gray", alpha = 1)
 
-    alphas = calculate_alpha(len(all_images))
+    lengthening_factor = 3
+
+    # alphas = calculate_alpha(len(all_images))
 
     ani = animation.FuncAnimation(
             fig,
             add_galaxy_to_mosaic,
             init_func = init,
-            frames    = len(all_images) * 3,
-            fargs     = (all_images, alphas,),
-            interval  = time_step * 100, # milliseconds
+            frames    = len(all_images) * lengthening_factor,
+            fargs     = (all_images, lengthening_factor,),
+            interval  = time_step * 1000, # milliseconds
             blit      = True
     )
 
