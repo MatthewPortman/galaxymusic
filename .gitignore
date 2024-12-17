@@ -170,3 +170,5 @@ music-in/super.fits
 /music-tmp/mosaics
 music-out/mosaic.jpg
 music-out/mosaic.mp4
+*.wav
+*.mp3
