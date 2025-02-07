@@ -1,4 +1,4 @@
-# GalaxyMusic
+# galaxymusic
 
 Making galaxies with music and hopefully... eventually... music with galaxies.
 
@@ -8,12 +8,12 @@ This image brought to you by the Brown University Alma Mater.
 
 ## Overview
 
-GalaxyMusic is the prototype of a Python library that allows you to create visualizations of 
+galaxymusic is the prototype of a Python library that allows you to create visualizations of 
 galaxies as informed by [GALFIT](https://users.obs.carnegiescience.edu/peng/work/galfit/galfit.html) 
 and synchronize them with music. The library provides tools to generate animations, process images, 
 and integrate audio to create a fun audiovisual experience.
 
-GalaxyMusic is dependent on a copy of the galfitlib local to the repository as denoted by the `_` preceeding it. 
+galaxymusic is dependent on a copy of the galfitlib local to the repository as denoted by the `_` preceeding it. 
 The main galfitlib repository is currently private but is a work in progress. 
 Upon its completion, this repo will be updated to correctly import it.
 
@@ -26,7 +26,7 @@ Upon its completion, this repo will be updated to correctly import it.
 ## Installation
 
 
-To install GalaxyMusic, clone the repository and install the required dependencies:
+To install galaxymusic, clone the repository and install the required dependencies:
 
 
 ```bash
